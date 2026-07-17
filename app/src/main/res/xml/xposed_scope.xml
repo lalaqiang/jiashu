@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Xposed 模块作用域
+    这里列出模块需要 Hook 的目标 APP 包名
+    测试时把 com.example.targetgame 改成你要加速的游戏包名
+    也可以在 VirtualXposed/太极阴里勾选作用域，不依赖此文件
+-->
+<resources>
+    <!-- 测试用：把这里改成目标游戏包名 -->
+    <item>com.example.targetgame</item>
+    <!-- 示例：放置类游戏 -->
+    <item>com.idle.example</item>
+</resources>

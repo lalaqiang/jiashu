@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+
+# Android Studio / IntelliJ
+*.iml
+.idea/
+local.properties
+captures/
+
+# 构建产物
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# 签名
+*.keystore
+*.jks
+
+# 日志
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

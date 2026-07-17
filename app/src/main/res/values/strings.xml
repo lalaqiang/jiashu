@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">游戏加速器</string>
+    <string name="subtitle">Xposed 模块 · 配合 VirtualXposed 使用</string>
+    <string name="xposed_description">手游加速模块：Hook SystemClock/sleep 等实现变速；含连点器、悬浮窗调速。配合 VirtualXposed 或太极阴使用。</string>
+
+    <!-- 主界面分区 -->
+    <string name="section_speed">变速控制</string>
+    <string name="section_tools">辅助工具</string>
+
+    <!-- 主界面按钮 -->
+    <string name="btn_floating">启动悬浮窗调速</string>
+    <string name="btn_click_config">连点器配置</string>
+
+    <!-- 主界面提示 -->
+    <string name="hint_default">使用方法：\n1. 安装 VirtualXposed 或太极·阴\n2. 在沙箱内启用本模块\n3. 把目标游戏加入沙箱运行\n4. 在此或悬浮窗调整倍率，1 秒后生效</string>
+    <string name="hint_no_world_readable">提示：当前系统不允许 WORLD_READABLE 模式，请在沙箱环境（VirtualXposed/太极阴）中使用。</string>
+
+    <!-- Toast 提示 -->
+    <string name="toast_speed_set">倍率已设为 %.1f x</string>
+    <string name="toast_enable_overlay">请先授予悬浮窗权限</string>
+    <string name="toast_enable_accessibility">请先在系统设置中启用连点器无障碍服务</string>
+    <string name="toast_add_point_first">请先添加至少一个点击点</string>
+    <string name="toast_click_started">连点器已启动</string>
+    <string name="toast_click_stopped">连点器已停止</string>
+    <string name="toast_invalid_input">请输入有效数字</string>
+
+    <!-- 连点器界面 -->
+    <string name="click_config_title">连点器配置</string>
+    <string name="click_service_label">游戏加速器 - 连点器</string>
+    <string name="click_service_desc">连点器服务，通过无障碍手势模拟点击屏幕指定位置。</string>
+    <string name="label_interval">点击间隔</string>
+    <string name="label_points">点击点列表</string>
+    <string name="btn_add">添加</string>
+    <string name="btn_clear">清空</string>
+    <string name="btn_start">开始</string>
+    <string name="btn_stop">停止</string>
+    <string name="btn_delete">删除</string>
+    <string name="btn_accessibility_on">无障碍已启用</string>
+    <string name="btn_accessibility_off">点击启用无障碍服务</string>
+    <string name="hint_add_point">输入点击位置坐标和按下时长。坐标原点为屏幕左上角。</string>
+    <string name="dialog_add_point">添加点击点</string>
+</resources>

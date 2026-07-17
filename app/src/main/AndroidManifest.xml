@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 悬浮窗权限（变速悬浮球用） -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:label="@string/app_name"
+        android:roundIcon="@android:drawable/ic_menu_compass"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MaterialComponents.DayNight">
+
+        <!-- 主界面：主控台 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 连点器配置界面 -->
+        <activity
+            android:name=".ClickConfigActivity"
+            android:exported="false"
+            android:label="@string/click_config_title" />
+
+        <!-- 连点器无障碍服务 -->
+        <service
+            android:name=".ClickService"
+            android:exported="false"
+            android:label="@string/click_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/click_accessibility_config" />
+        </service>
+
+        <!-- 悬浮窗调速服务 -->
+        <service
+            android:name=".FloatingService"
+            android:exported="false" />
+
+        <!-- ============ Xposed 模块声明 ============ -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="@string/xposed_description" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="82" />
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@xml/xposed_scope" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // Xposed API 托管在 jitpack
+        maven { url 'https://api.xposed.info/' }
+        maven { url 'https://jitpack.io' }
+    }
+}
+rootProject.name = "GameSpeedModule"
+include ':app'

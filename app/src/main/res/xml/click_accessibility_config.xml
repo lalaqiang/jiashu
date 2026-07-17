@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    无障碍服务配置
+    - description: 显示在系统无障碍设置里的服务说明
+    - accessibilityEventTypes: 我们不需要监听具体事件，设为 typeWindowContentChanged 占位
+    - canPerformGestures: 必须 true，否则 dispatchGesture 不可用
+    - notificationTimeout: 不重要
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowContentChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault"
+    android:canPerformGestures="true"
+    android:description="@string/click_service_desc"
+    android:notificationTimeout="100" />
