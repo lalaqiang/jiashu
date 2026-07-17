@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">游戏加速器</string>
     <string name="subtitle">Xposed 模块 · 配合 VirtualXposed 使用</string>
-    <string name="xposed_description">手游加速模块：Hook SystemClock/sleep 等实现变速；含连点器、悬浮窗调速。配合 VirtualXposed 或太极阴使用。</string>
+    <string name="xposed_description">手游加速模块：Hook SystemClock/sleep 等实现变速；含连点器、悬浮窗调速、屏幕录制点位。配合 VirtualXposed 或太极阴使用。</string>
 
     <!-- 主界面分区 -->
     <string name="section_speed">变速控制</string>
@@ -14,7 +14,7 @@
 
     <!-- 主界面提示 -->
     <string name="hint_default">使用方法：\n1. 安装 VirtualXposed 或太极·阴\n2. 在沙箱内启用本模块\n3. 把目标游戏加入沙箱运行\n4. 在此或悬浮窗调整倍率，1 秒后生效</string>
-    <string name="hint_no_world_readable">提示：当前系统不允许 WORLD_READABLE 模式，请在沙箱环境（VirtualXposed/太极阴）中使用。</string>
+    <string name="hint_no_world_readable">提示：当前系统不允许 WORLD_READABLE 模式，已改用 ContentProvider 跨进程同步倍率（兼容 Android 11+）。</string>
 
     <!-- Toast 提示 -->
     <string name="toast_speed_set">倍率已设为 %.1f x</string>
@@ -24,6 +24,14 @@
     <string name="toast_click_started">连点器已启动</string>
     <string name="toast_click_stopped">连点器已停止</string>
     <string name="toast_invalid_input">请输入有效数字</string>
+
+    <!-- 录制功能 -->
+    <string name="btn_record">录制</string>
+    <string name="btn_record_stop">停止录制</string>
+    <string name="record_hint">点击屏幕任意位置添加点位</string>
+    <string name="record_count">已录制 %d 个点位</string>
+    <string name="record_started">录制模式已启动：点击屏幕添加点位</string>
+    <string name="record_stopped">录制结束，共 %d 个点位</string>
 
     <!-- 连点器界面 -->
     <string name="click_config_title">连点器配置</string>

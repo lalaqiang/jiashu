@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#1976D2</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="accent">#FF4081</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
+
+    <!-- 悬浮窗配色 -->
+    <color name="ball_bg">#FF1976D2</color>
+    <color name="panel_bg">#E8101014</color>
+    <color name="panel_stroke">#33FFFFFF</color>
+    <color name="text_primary">#FFFFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="btn_speed_bg">#33FFFFFF</color>
+    <color name="btn_speed_press">#55FFFFFF</color>
+    <color name="btn_close_bg">#33FF5252</color>
+    <color name="record_red">#FFFF5252</color>
+    <color name="record_overlay_bg">#33000000</color>
 </resources>

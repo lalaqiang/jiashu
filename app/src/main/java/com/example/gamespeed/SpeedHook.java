@@ -17,9 +17,10 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  *  - Hook 所有"睡眠/等待"的 API，让等待时长按倍率缩短
  *  - 双管齐下：游戏看到的"时间流逝"变成 N 倍，自身 sleep 也变短，整体加速
  *
- * 倍率来源：
- *  - 主进程 MainActivity 写入 XSharedPreferences（沙箱内可读）
- *  - 本类每秒刷新一次缓存值，避免每次 Hook 都读文件
+ * 倍率来源（双轨，兼容 Android 11+）：
+ *  1. 优先：通过 ContentResolver 查询 SpeedProvider（替代 MODE_WORLD_READABLE）
+ *  2. 兜底：XSharedPreferences（老沙箱/老系统仍可用）
+ *  本类每秒刷新一次缓存值，避免每次 Hook 都跨进程查询
  *
  * 使用基准时间法（避免 speed 变化时时间跳变）：
  *  - 记录上次切换 speed 时的「真实时间基准」和「虚拟时间基准」
@@ -31,11 +32,13 @@ public class SpeedHook implements IXposedHookLoadPackage {
     private static final String TAG = "GameSpeed";
     private static final String MODULE_PKG = "com.example.gamespeed";
     private static final String PREF_NAME = "speed";
+    private static final String SPEED_URI = "content://com.example.gamespeed.speed/speed";
 
     // ============ 倍率缓存（每个被 Hook 进程独立一份） ============
     private static XSharedPreferences pref;
     private static long lastReloadTime = 0;
     private static double currentSpeed = 1.0;
+    private static boolean providerFailed = false; // Provider 不可用后转 XSharedPreferences
 
     // 毫秒级时间基准（用于 currentTimeMillis / uptimeMillis / elapsedRealtime）
     private static long baseRealMillis = 0;
@@ -47,25 +50,72 @@ public class SpeedHook implements IXposedHookLoadPackage {
     private static long baseVirtualNanos = 0;
     private static boolean nanosInited = false;
 
-    /** 从主进程 SharedPreferences 读取倍率，1 秒刷新一次 */
+    /** 从 ContentProvider 读取倍率，失败时回退 XSharedPreferences */
     private static double getSpeed() {
         long now = SystemClock.elapsedRealtime();
-        if (pref == null) {
-            pref = new XSharedPreferences(MODULE_PKG, PREF_NAME);
-            pref.makeWorldReadable();
-        }
         if (now - lastReloadTime > 1000) {
-            pref.reload();
-            try {
-                currentSpeed = pref.getFloat("speed", 1.0f);
-            } catch (Throwable ignored) {
-                currentSpeed = 1.0;
-            }
             lastReloadTime = now;
+            double s = -1;
+            if (!providerFailed) {
+                try {
+                    s = readSpeedFromProvider();
+                } catch (Throwable t) {
+                    XposedBridge.log(TAG + " provider read fail: " + t);
+                    s = -1;
+                }
+                if (s < 0) providerFailed = true; // 切到 XSharedPreferences 兜底
+            }
+            if (s < 0) {
+                s = readSpeedFromXSharedPreferences();
+            }
+            if (s > 0) currentSpeed = s;
         }
         if (currentSpeed < 0.1) currentSpeed = 0.1;   // 最低 0.1 倍（慢动作）
         if (currentSpeed > 20.0) currentSpeed = 20.0;  // 最高 20 倍
         return currentSpeed;
+    }
+
+    /**
+     * 通过 ActivityThread.currentApplication() 拿被 Hook 进程的 Context，
+     * 再用 ContentResolver 查询 SpeedProvider 获取倍率。
+     * 仅用反射，避免对被 Hook 进程的 ClassLoader 依赖。
+     */
+    private static double readSpeedFromProvider() {
+        try {
+            Class<?> atClass = XposedHelpers.findClass("android.app.ActivityThread", null);
+            Object app = XposedHelpers.callStaticMethod(atClass, "currentApplication");
+            if (app == null) return -1;
+            Object resolver = XposedHelpers.callMethod(app, "getContentResolver");
+            Class<?> uriClass = XposedHelpers.findClass("android.net.Uri", null);
+            Object uri = XposedHelpers.callStaticMethod(uriClass, "parse", SPEED_URI);
+            Object cursor = XposedHelpers.callMethod(resolver, "query",
+                    uri, null, null, null, null);
+            if (cursor == null) return -1;
+            try {
+                if ((Boolean) XposedHelpers.callMethod(cursor, "moveToFirst")) {
+                    String val = (String) XposedHelpers.callMethod(cursor, "getString", 0);
+                    return Double.parseDouble(val);
+                }
+            } finally {
+                XposedHelpers.callMethod(cursor, "close");
+            }
+            return -1;
+        } catch (Throwable t) {
+            return -1;
+        }
+    }
+
+    private static double readSpeedFromXSharedPreferences() {
+        try {
+            if (pref == null) {
+                pref = new XSharedPreferences(MODULE_PKG, PREF_NAME);
+                pref.makeWorldReadable();
+            }
+            pref.reload();
+            return pref.getFloat("speed", 1.0f);
+        } catch (Throwable t) {
+            return 1.0;
+        }
     }
 
     /** 检测 speed 变化并刷新毫秒基准 */

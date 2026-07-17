@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * 主控台
  *
  * 三个入口：
- *  1. 变速面板（SeekBar 调倍率，写入 SharedPreferences 供 Hook 进程读取）
+ *  1. 变速面板（SeekBar 调倍率，写入 SharedPreferences + ContentProvider 供 Hook 进程读取）
  *  2. 悬浮窗开关（启动 FloatingService，游戏内可调倍率）
  *  3. 连点器配置（跳转 ClickConfigActivity）
  */
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnClick = findViewById(R.id.btnClick);
 
         // ============ 1. 变速 SeekBar ============
+        // Android 11+ 不允许 MODE_WORLD_READABLE，统一用 MODE_PRIVATE；
+        // 跨进程同步交给 SpeedProvider
         try {
             sp = getSharedPreferences(PREF_NAME, MODE_WORLD_READABLE);
         } catch (Throwable e) {
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar bar) {
                 float speed = Math.max(0.1f, bar.getProgress() / 10.0f);
+                // 同时写 SharedPreferences 和 ContentProvider
                 sp.edit().putFloat(KEY_SPEED, speed).apply();
+                SpeedProvider.setSpeed(MainActivity.this, speed);
                 Toast.makeText(MainActivity.this,
                         getString(R.string.toast_speed_set, speed), Toast.LENGTH_SHORT).show();
             }
