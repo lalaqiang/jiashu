@@ -28,9 +28,9 @@ android {
 }
 
 dependencies {
-    // Xposed API：compileOnly，不打包进 APK，由框架运行时注入
-    // 官方坐标，仓库在 https://api.xposed.info/
-    compileOnly 'de.robv.android.xposed:api:82'
+    // Xposed API：本地 jar，compileOnly 不打包进 APK
+    // （api.xposed.info 在某些 CI 网络环境下拉不到，改用本地 jar 最稳）
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 
     // AndroidX 基础库
     implementation 'androidx.appcompat:appcompat:1.6.1'
