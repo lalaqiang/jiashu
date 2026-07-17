@@ -29,8 +29,8 @@ android {
 
 dependencies {
     // Xposed API：compileOnly，不打包进 APK，由框架运行时注入
-    // 优先用 jitpack 的 rovo89/XposedBridge api-82 tag（CI 环境更稳定）
-    compileOnly 'com.github.rovo89:XposedBridge:api-82'
+    // 官方坐标，仓库在 https://api.xposed.info/
+    compileOnly 'de.robv.android.xposed:api:82'
 
     // AndroidX 基础库
     implementation 'androidx.appcompat:appcompat:1.6.1'
