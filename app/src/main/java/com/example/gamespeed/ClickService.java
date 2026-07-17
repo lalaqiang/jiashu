@@ -43,7 +43,7 @@ public class ClickService extends AccessibilityService {
         public void run() {
             if (!running) return;
 
-            List<ClickPoint> points = ClickConfig.getPoints();
+            List<ClickConfig.ClickPoint> points = ClickConfig.getPoints();
             if (points.isEmpty()) {
                 // 没点位，1 秒后再试
                 handler.postDelayed(this, 1000);
@@ -51,7 +51,7 @@ public class ClickService extends AccessibilityService {
             }
 
             // 取当前点
-            ClickPoint p = points.get(currentIndex);
+            ClickConfig.ClickPoint p = points.get(currentIndex);
             dispatchClick(p.x, p.y, p.durationMs);
 
             // 下一个点（循环）
