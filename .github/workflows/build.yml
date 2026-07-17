@@ -32,7 +32,16 @@ jobs:
           gradle-version: '8.3'
 
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace --info 2>&1 | tee build.log
+        continue-on-error: true
+
+      - name: Show build log on failure
+        if: always()
+        run: |
+          echo "===== BUILD LOG (last 100 lines) ====="
+          tail -n 100 build.log || true
+          echo "===== ERROR LINES ====="
+          grep -iE "error:|ERROR:|FAILED|error:" build.log || echo "No error lines found"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
