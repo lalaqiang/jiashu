@@ -10,9 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // Xposed API 托管在 jitpack
-        maven { url 'https://api.xposed.info/' }
+        // Xposed API：jitpack 比 api.xposed.info 更稳定
         maven { url 'https://jitpack.io' }
+        maven { url 'https://api.xposed.info/' }
     }
 }
 rootProject.name = "GameSpeedModule"
